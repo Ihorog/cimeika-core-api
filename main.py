@@ -10,15 +10,13 @@ app = FastAPI(
 )
 
 
-# ----- Моделі даних -----
-
 class ChatMessage(BaseModel):
-    role: str            # "user" | "system" | "assistant"
+    role: str
     content: str
 
 
 class ChatRequest(BaseModel):
-    persona: str = "ci"  # "ci", "kazkar", "malya", "nastrij", "podia", "gallery", "calendar"
+    persona: str = "ci"
     messages: List[ChatMessage]
 
 
@@ -28,8 +26,6 @@ class ChatResponse(BaseModel):
     reply: str
     last_user: Optional[str] = None
 
-
-# ----- Сервісні ендпоінти -----
 
 @app.get("/", tags=["system"])
 def root():
@@ -53,8 +49,6 @@ def root():
 def health():
     return {"status": "ok"}
 
-
-# ----- Модулі Cimeika (поки статусні) -----
 
 @app.get("/ci", tags=["ci"])
 def ci_status():
@@ -90,8 +84,6 @@ def gallery_status():
 def calendar_status():
     return {"module": "calendar", "role": "час / вузли", "status": "ready"}
 
-
-# ----- Базовий чат (echo-ядро) -----
 
 @app.post("/api/chat", response_model=ChatResponse, tags=["chat"])
 def chat(request: ChatRequest):
